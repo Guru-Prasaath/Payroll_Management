@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Payroll - Leave Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* All previous CSS styles remain the same */
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #00d4ff;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --glass-effect: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --blur: blur(10px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--light-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background: rgba(74, 107, 255, 0.3);
+            color: var(--secondary-color);
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-effect);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(74, 107, 255, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(220, 53, 69, 0.2) !important;
+            border: 1px solid #dc3545 !important;
+            color: #dc3545 !important;
+            margin-left: 5px;
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.3) !important;
+        }
+
+        .card {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .card-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--light-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(74, 107, 255, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .badge-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .badge-info {
+            background-color: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px 0 0 8px;
+            color: var(--light-color);
+            font-size: 1rem;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-container button:hover {
+            opacity: 0.9;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--light-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+            color: var(--light-color);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--secondary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .employee-details {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .employee-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border: 2px solid var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--secondary-color);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .employee-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .employee-info p {
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .employee-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .meta-card {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .meta-card h4 {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+
+        .meta-card p {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .employee-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .employee-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Pulse animation for notifications */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 212, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--secondary-color);
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Add these additional styles for leave management */
+        
+        .leave-status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+        
+        .leave-status-approved {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+        
+        .leave-status-rejected {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+        
+        .leave-days-cell {
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-buttons button {
+            padding: 5px 8px;
+            font-size: 0.8rem;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">CollegePay</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Menu</h3>
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="employees.html"><i class="fas fa-users"></i> Employees</a></li>
+                    <li><a href="payroll.html"><i class="fas fa-money-bill-wave"></i> Payroll</a></li>
+                    <li><a href="departments.html"><i class="fas fa-building"></i> Departments</a></li>
+                    <li><a href="positions.html"><i class="fas fa-briefcase"></i> Positions</a></li>
+                    <li><a href="leave.html" class="active"><i class="fas fa-calendar-alt"></i> Leave Management</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li id="adminMenu" style="display: none;"><a href="admin.html"><i class="fas fa-lock"></i> Admin</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <h2>Leave Management</h2>
+                    <button class="btn" id="applyLeaveBtn"><i class="fas fa-plus"></i> Apply for Leave</button>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card floating">
+                        <h3>Pending Requests</h3>
+                        <p id="pendingLeavesCount">0</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.2s;">
+                        <h3>Approved This Month</h3>
+                        <p id="approvedLeavesCount">0</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.4s;">
+                        <h3>Rejected This Month</h3>
+                        <p id="rejectedLeavesCount">0</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.6s;">
+                        <h3>Your Remaining Days</h3>
+                        <p id="remainingLeavesCount">0</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Leave Applications</h3>
+                        <div class="search-container">
+                            <input type="text" id="searchLeave" placeholder="Search leaves...">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="leavesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Employee</th>
+                                    <th>Leave Type</th>
+                                    <th>Dates</th>
+                                    <th>Days</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Leaves will be loaded here via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Apply Leave Modal -->
+    <div class="modal" id="applyLeaveModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Apply for Leave</h2>
+            <form id="leaveForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="leaveEmployee">Employee</label>
+                        <select id="leaveEmployee" class="form-control" required>
+                            <option value="">Select Employee</option>
+                            <!-- Employees will be loaded here via JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="leaveType">Leave Type</label>
+                        <select id="leaveType" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="Vacation">Vacation</option>
+                            <option value="Sick">Sick</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Bereavement">Bereavement</option>
+                            <option value="Maternity/Paternity">Maternity/Paternity</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="date" id="startDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input type="date" id="endDate" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leaveReason">Reason</label>
+                    <textarea id="leaveReason" class="form-control" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leave Details Modal -->
+    <div class="modal" id="leaveDetailsModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Leave Application Details</h2>
+            
+            <div class="employee-details">
+                <div class="employee-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="employee-info">
+                    <h3 id="leaveEmployeeName">John Doe</h3>
+                    <p id="leaveEmployeeDept">Department: Computer Science</p>
+                    <p id="leaveEmployeePosition">Position: Professor</p>
+                </div>
+            </div>
+            
+            <div class="employee-meta">
+                <div class="meta-card">
+                    <h4>Leave Type</h4>
+                    <p id="detailLeaveType">Vacation</p>
+                </div>
+                <div class="meta-card">
+                    <h4>Duration</h4>
+                    <p id="detailLeaveDays">5 days</p>
+                </div>
+                <div class="meta-card">
+                    <h4>Status</h4>
+                    <p id="detailLeaveStatus"><span class="badge badge-success">Approved</span></p>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Start Date</label>
+                    <p id="detailStartDate">2023-06-01</p>
+                </div>
+                <div class="form-group">
+                    <label>End Date</label>
+                    <p id="detailEndDate">2023-06-05</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Reason</label>
+                <p id="detailLeaveReason">Family vacation</p>
+            </div>
+            
+            <div id="leaveActions" class="form-group" style="display: none;">
+                <h4>Manager Actions</h4>
+                <div class="action-buttons">
+                    <button id="approveLeaveBtn" class="btn"><i class="fas fa-check"></i> Approve</button>
+                    <button id="rejectLeaveBtn" class="btn btn-secondary"><i class="fas fa-times"></i> Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // Database class for leave management
+        class Database {
+            constructor() {
+                this.initializeDatabase();
+            }
+
+            initializeDatabase() {
+                if (!localStorage.getItem('collegePayrollDB')) {
+                    const initialData = {
+                        leaves: [
+                            {
+                                LeaveID: 1,
+                                EmployeeID: 1,
+                                EmployeeName: "John Smith",
+                                LeaveType: "Vacation",
+                                StartDate: "2023-06-01",
+                                EndDate: "2023-06-05",
+                                Days: 5,
+                                Reason: "Family vacation",
+                                Status: "Approved",
+                                AppliedDate: "2023-05-20"
+                            },
+                            {
+                                LeaveID: 2,
+                                EmployeeID: 2,
+                                EmployeeName: "Sarah Johnson",
+                                LeaveType: "Sick",
+                                StartDate: "2023-06-10",
+                                EndDate: "2023-06-11",
+                                Days: 2,
+                                Reason: "Flu",
+                                Status: "Pending",
+                                AppliedDate: "2023-06-05"
+                            }
+                        ],
+                        employees: [
+                            { 
+                                EmployeeID: 1, 
+                                FirstName: 'John', 
+                                LastName: 'Smith',
+                                DepartmentName: 'Computer Science',
+                                PositionTitle: 'Professor'
+                            },
+                            { 
+                                EmployeeID: 2, 
+                                FirstName: 'Sarah', 
+                                LastName: 'Johnson',
+                                DepartmentName: 'Mathematics',
+                                PositionTitle: 'Associate Professor'
+                            }
+                        ],
+                        leavePolicies: {
+                            Vacation: 15,
+                            Sick: 10,
+                            Personal: 5,
+                            Bereavement: 3,
+                            Maternity: 90,
+                            Paternity: 14
+                        }
+                    };
+                    localStorage.setItem('collegePayrollDB', JSON.stringify(initialData));
+                }
+            }
+
+            getData() {
+                return JSON.parse(localStorage.getItem('collegePayrollDB'));
+            }
+
+            saveData(data) {
+                localStorage.setItem('collegePayrollDB', JSON.stringify(data));
+            }
+
+            // Leave management methods
+            getLeaves() {
+                return this.getData().leaves || [];
+            }
+
+            getLeaveById(id) {
+                return this.getLeaves().find(l => l.LeaveID == id);
+            }
+
+            getEmployeeLeaves(employeeId) {
+                return this.getLeaves().filter(l => l.EmployeeID == employeeId);
+            }
+
+            addLeave(leave) {
+            const db = this.getData();
+            
+            // Initialize leaves array if it doesn't exist
+            if (!db.leaves) {
+                db.leaves = [];
+            }
+            
+            // Calculate days between dates
+            const start = new Date(leave.StartDate);
+            const end = new Date(leave.EndDate);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            // Get employee details
+            const employee = db.employees.find(e => e.EmployeeID == leave.EmployeeID);
+            if (!employee) {
+                console.error('Employee not found');
+                return null;
+            }
+            
+            // Create new leave ID
+            const newLeaveId = db.leaves.length > 0 ? 
+                Math.max(...db.leaves.map(l => l.LeaveID)) + 1 : 1;
+            
+            const newLeave = {
+                LeaveID: newLeaveId,
+                EmployeeID: leave.EmployeeID,
+                EmployeeName: `${employee.FirstName} ${employee.LastName}`,
+                Department: employee.DepartmentName,
+                Position: employee.PositionTitle,
+                LeaveType: leave.LeaveType,
+                StartDate: leave.StartDate,
+                EndDate: leave.EndDate,
+                Days: diffDays,
+                Reason: leave.Reason,
+                Status: "Pending",
+                AppliedDate: new Date().toISOString().split('T')[0] // Today's date
+            };
+            
+            db.leaves.push(newLeave);
+            this.saveData(db);
+            return newLeave;
+        }
+            updateLeaveStatus(leaveId, status) {
+                const db = this.getData();
+                const index = db.leaves.findIndex(l => l.LeaveID == leaveId);
+                
+                if (index !== -1) {
+                    db.leaves[index].Status = status;
+                    this.saveData(db);
+                    return true;
+                }
+                return false;
+            }
+
+            deleteLeave(leaveId) {
+                const db = this.getData();
+                const index = db.leaves.findIndex(l => l.LeaveID == leaveId);
+                
+                if (index !== -1) {
+                    db.leaves.splice(index, 1);
+                    this.saveData(db);
+                    return true;
+                }
+                return false;
+            }
+
+            // Employee methods for dropdown
+            getEmployees() {
+                return this.getData().employees || [];
+            }
+
+            // Leave policy methods
+            getLeavePolicy(type) {
+                return this.getData().leavePolicies?.[type] || 0;
+            }
+
+            getEmployeeRemainingLeave(employeeId, type) {
+                const leaves = this.getEmployeeLeaves(employeeId)
+                    .filter(l => l.LeaveType === type && l.Status === "Approved");
+                
+                const usedDays = leaves.reduce((sum, leave) => sum + leave.Days, 0);
+                const totalAllowed = this.getLeavePolicy(type);
+                
+                return totalAllowed - usedDays;
+            }
+        }
+
+        // Initialize database
+        const db = new Database();
+
+        // DOM elements
+        const applyLeaveBtn = document.getElementById('applyLeaveBtn');
+        const applyLeaveModal = document.getElementById('applyLeaveModal');
+        const leaveDetailsModal = document.getElementById('leaveDetailsModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
+        const leaveForm = document.getElementById('leaveForm');
+        const leavesTable = document.getElementById('leavesTable').getElementsByTagName('tbody')[0];
+        const searchLeave = document.getElementById('searchLeave');
+        const leaveEmployeeSelect = document.getElementById('leaveEmployee');
+        const leaveTypeSelect = document.getElementById('leaveType');
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+        const leaveReasonInput = document.getElementById('leaveReason');
+        
+        // Stats elements
+        const pendingLeavesCount = document.getElementById('pendingLeavesCount');
+        const approvedLeavesCount = document.getElementById('approvedLeavesCount');
+        const rejectedLeavesCount = document.getElementById('rejectedLeavesCount');
+        const remainingLeavesCount = document.getElementById('remainingLeavesCount');
+
+        // Check user role and adjust UI
+        if (currentUser && currentUser.role === 'admin') {
+            document.getElementById('adminMenu').style.display = 'block';
+        }
+
+        // Set today's date as default for leave dates
+        const today = new Date().toISOString().split('T')[0];
+        startDateInput.min = today;
+        endDateInput.min = today;
+
+        // Update end date min when start date changes
+        startDateInput.addEventListener('change', function() {
+            endDateInput.min = this.value;
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+
+        // Modal functionality
+        applyLeaveBtn.addEventListener('click', () => {
+            loadEmployeeDropdown();
+            applyLeaveModal.style.display = 'flex';
+        });
+
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                applyLeaveModal.style.display = 'none';
+                leaveDetailsModal.style.display = 'none';
+            });
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === applyLeaveModal) {
+                applyLeaveModal.style.display = 'none';
+            }
+            if (event.target === leaveDetailsModal) {
+                leaveDetailsModal.style.display = 'none';
+            }
+        });
+
+        // Form submission - Apply Leave
+        leaveForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Get form values
+        const newLeave = {
+            EmployeeID: parseInt(leaveEmployeeSelect.value),
+            LeaveType: leaveTypeSelect.value,
+            StartDate: startDateInput.value,
+            EndDate: endDateInput.value,
+            Reason: leaveReasonInput.value
+        };
+        // Debug: Show what's being submitted
+    console.log('Submitting leave:', newLeave);  // <-- ADD THIS LINE
+        
+        // Validate form
+        if (!newLeave.EmployeeID || !newLeave.LeaveType || !newLeave.StartDate || !newLeave.EndDate) {
+            alert('Please fill all required fields');
+            return;
+        }
+        
+        // Check if end date is after start date
+        if (new Date(newLeave.EndDate) < new Date(newLeave.StartDate)) {
+            alert('End date must be after start date');
+            return;
+        }
+        
+        // Add leave to database
+        const createdLeave = db.addLeave(newLeave);
+         // Debug: Show what was returned from database
+    console.log('Created leave:', createdLeave);  // <-- ADD THIS LINE
+        
+        if (createdLeave) {
+            // Close modal and reset form
+            applyLeaveModal.style.display = 'none';
+            leaveForm.reset();
+            
+            // Refresh the display
+            loadLeaves();
+            updateLeaveStats();
+            
+            // Show success message
+            alert('Leave application submitted successfully!');
+        } else {
+            alert('Failed to submit leave application');
+        }
+    });
+
+    // Debugging function to check storage
+    function debugStorage() {
+        console.log('Current leave data:', db.getLeaves());
+        console.log('Full database:', db.getData());
+    }
+
+    // Call this during development to verify data is being stored
+    debugStorage();
+
+
+        // Search functionality
+        searchLeave.addEventListener('input', () => {
+            const searchTerm = searchLeave.value.toLowerCase();
+            const leaves = db.getLeaves();
+            const filteredLeaves = leaves.filter(leave => 
+                leave.EmployeeName.toLowerCase().includes(searchTerm) ||
+                leave.LeaveType.toLowerCase().includes(searchTerm) ||
+                leave.Reason.toLowerCase().includes(searchTerm)
+            );
+            displayLeaves(filteredLeaves);
+        });
+
+        // Load and display leaves
+        function loadLeaves() {
+            displayLeaves(db.getLeaves());
+        }
+
+        function displayLeaves(leaveList) {
+            leavesTable.innerHTML = '';
+            
+            leaveList.forEach(leave => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${leave.LeaveID}</td>
+                    <td>${leave.EmployeeName}</td>
+                    <td>${leave.LeaveType}</td>
+                    <td>${formatDate(leave.StartDate)} - ${formatDate(leave.EndDate)}</td>
+                    <td class="leave-days-cell">${leave.Days}</td>
+                    <td><span class="badge leave-status-${leave.Status.toLowerCase()}">${leave.Status}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn-secondary view-leave-btn" data-id="${leave.LeaveID}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${currentUser.role === 'admin' || currentUser.role === 'hr' ? 
+                          `<button class="btn-secondary delete-leave-btn" data-id="${leave.LeaveID}">
+                              <i class="fas fa-trash"></i>
+                           </button>` : ''}
+                    </td>
+                `;
+                
+                leavesTable.appendChild(row);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-leave-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const leaveId = e.currentTarget.getAttribute('data-id');
+                    viewLeaveDetails(leaveId);
+                });
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-leave-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const leaveId = e.currentTarget.getAttribute('data-id');
+                    deleteLeave(leaveId);
+                });
+            });
+        }
+
+        function viewLeaveDetails(leaveId) {
+            const leave = db.getLeaveById(leaveId);
+            if (!leave) return;
+            
+            // Set leave details
+            document.getElementById('leaveEmployeeName').textContent = leave.EmployeeName;
+            document.getElementById('leaveEmployeeDept').textContent = `Department: ${leave.Department || 'N/A'}`;
+            document.getElementById('leaveEmployeePosition').textContent = `Position: ${leave.Position || 'N/A'}`;
+            document.getElementById('detailLeaveType').textContent = leave.LeaveType;
+            document.getElementById('detailLeaveDays').textContent = `${leave.Days} days`;
+            document.getElementById('detailStartDate').textContent = leave.StartDate;
+            document.getElementById('detailEndDate').textContent = leave.EndDate;
+            document.getElementById('detailLeaveReason').textContent = leave.Reason;
+            
+            // Set status badge
+            const statusElement = document.getElementById('detailLeaveStatus');
+            statusElement.innerHTML = '';
+            const badge = document.createElement('span');
+            badge.className = `badge leave-status-${leave.Status.toLowerCase()}`;
+            badge.textContent = leave.Status;
+            statusElement.appendChild(badge);
+            
+            // Show/hide action buttons based on user role and leave status
+            const leaveActions = document.getElementById('leaveActions');
+            if ((currentUser.role === 'admin' || currentUser.role === 'hr') && leave.Status === 'Pending') {
+                leaveActions.style.display = 'block';
+                
+                // Set up action buttons
+                document.getElementById('approveLeaveBtn').onclick = function() {
+                    updateLeaveStatus(leaveId, 'Approved');
+                };
+                
+                document.getElementById('rejectLeaveBtn').onclick = function() {
+                    updateLeaveStatus(leaveId, 'Rejected');
+                };
+            } else {
+                leaveActions.style.display = 'none';
+            }
+            
+            leaveDetailsModal.style.display = 'flex';
+        }
+
+        function deleteLeave(leaveId) {
+            if (confirm('Are you sure you want to delete this leave application?')) {
+                const success = db.deleteLeave(leaveId);
+                if (success) {
+                    loadLeaves();
+                    updateLeaveStats();
+                } else {
+                    alert('Failed to delete leave application');
+                }
+            }
+        }
+
+        function updateLeaveStatus(leaveId, status) {
+            const success = db.updateLeaveStatus(leaveId, status);
+            if (success) {
+                leaveDetailsModal.style.display = 'none';
+                loadLeaves();
+                updateLeaveStats();
+            } else {
+                alert('Failed to update leave status');
+            }
+        }
+
+        function loadEmployeeDropdown() {
+            leaveEmployeeSelect.innerHTML = '<option value="">Select Employee</option>';
+            db.getEmployees().forEach(employee => {
+                const option = document.createElement('option');
+                option.value = employee.EmployeeID;
+                option.textContent = `${employee.FirstName} ${employee.LastName}`;
+                leaveEmployeeSelect.appendChild(option);
+            });
+        }
+
+        function updateLeaveStats() {
+            const leaves = db.getLeaves();
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            
+            // Pending leaves count
+            pendingLeavesCount.textContent = leaves.filter(l => l.Status === 'Pending').length;
+            
+            // Approved this month
+            approvedLeavesCount.textContent = leaves.filter(l => 
+                l.Status === 'Approved' && 
+                new Date(l.AppliedDate).getMonth() + 1 === currentMonth &&
+                new Date(l.AppliedDate).getFullYear() === currentYear
+            ).length;
+            
+            // Rejected this month
+            rejectedLeavesCount.textContent = leaves.filter(l => 
+                l.Status === 'Rejected' && 
+                new Date(l.AppliedDate).getMonth() + 1 === currentMonth &&
+                new Date(l.AppliedDate).getFullYear() === currentYear
+            ).length;
+            
+            // Remaining leave days (for current user if employee)
+            if (currentUser.role === 'employee') {
+                const remaining = db.getEmployeeRemainingLeave(currentUser.id, 'Vacation');
+                remainingLeavesCount.textContent = remaining;
+            } else {
+                remainingLeavesCount.textContent = '-';
+            }
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLeaves();
+            updateLeaveStats();
+            
+            // Show/hide apply leave button based on permissions
+            if (currentUser.role !== 'admin' && currentUser.role !== 'hr' && currentUser.role !== 'employee') {
+                applyLeaveBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

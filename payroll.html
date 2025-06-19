@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Payroll System - Payroll</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #4a6bff;
+            --secondary-color: #00d4ff;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --glass-effect: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --blur: blur(10px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--light-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary-color);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a:hover, .sidebar ul li a.active {
+            background: rgba(74, 107, 255, 0.3);
+            color: var(--secondary-color);
+        }
+
+        .sidebar ul li a i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass-effect);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(74, 107, 255, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(220, 53, 69, 0.2) !important;
+            border: 1px solid #dc3545 !important;
+            color: #dc3545 !important;
+            margin-left: 5px;
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.3) !important;
+        }
+
+        .card {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .card-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--light-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--secondary-color);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(74, 107, 255, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .badge-warning {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .badge-danger {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .badge-info {
+            background-color: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border: 1px solid #00d4ff;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px 0 0 8px;
+            color: var(--light-color);
+            font-size: 1rem;
+        }
+
+        .search-container button {
+            padding: 12px 20px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-container button:hover {
+            opacity: 0.9;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-effect);
+            backdrop-filter: var(--blur);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--light-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            position: relative;
+            color: var(--light-color);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            color: var(--secondary-color);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .payroll-amount {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 500;
+        }
+
+        .payroll-status-processed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+
+        .payroll-status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .payroll-status-cancelled {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-buttons button {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            height: auto;
+            padding: 10px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: var(--light-color);
+            line-height: 1.5;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+        }
+
+        .select2-dropdown {
+            background-color: #1a1a2e;
+            border: 1px solid var(--glass-border);
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--primary-color);
+        }
+
+        .select2-container--default .select2-results__option[aria-selected=true] {
+            background-color: rgba(74, 107, 255, 0.3);
+        }
+
+        @media (max-width: 992px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 212, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--secondary-color);
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">CollegePay</div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> Notifications</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="dashboard">
+            <aside class="sidebar">
+                <h3>Menu</h3>
+                <ul>
+                    <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="employees.html"><i class="fas fa-users"></i> Employees</a></li>
+                    <li><a href="payroll.html" class="active"><i class="fas fa-money-bill-wave"></i> Payroll</a></li>
+                    <li><a href="departments.html"><i class="fas fa-building"></i> Departments</a></li>
+                    <li><a href="positions.html"><i class="fas fa-briefcase"></i> Positions</a></li>
+                    <li><a href="leave.html"><i class="fas fa-calendar-alt"></i> Leave Management</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li id="adminMenu" style="display: none;"><a href="admin.html"><i class="fas fa-lock"></i> Admin</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <div class="page-header">
+                    <h2>Payroll Management</h2>
+                    <div>
+                        <button class="btn" id="runPayrollBtn"><i class="fas fa-calculator"></i> Run Payroll</button>
+                        <button class="btn btn-secondary" id="addAdjustmentBtn"><i class="fas fa-plus-circle"></i> Add Adjustment</button>
+                        <button class="btn btn-secondary" id="editSalariesBtn"><i class="fas fa-edit"></i> Edit Salaries</button>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card floating">
+                        <h3>Total Payroll This Month</h3>
+                        <p id="totalPayrollAmount">$50000</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.2s;">
+                        <h3>Processed Payments</h3>
+                        <p id="processedPayments">1</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.4s;">
+                        <h3>Pending Payments</h3>
+                        <p id="pendingPayments">1</p>
+                    </div>
+                    <div class="stat-card floating" style="animation-delay: 0.6s;">
+                        <h3>Tax Withholdings</h3>
+                        <p id="taxWithholdings">$0.00</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Payroll Records</h3>
+                        <div class="search-container">
+                            <input type="text" id="searchPayroll" placeholder="Search payroll records...">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="payrollTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Employee</th>
+                                    <th>Pay Period</th>
+                                    <th>Gross Pay</th>
+                                    <th>Deductions</th>
+                                    <th>Net Pay</th>
+                                    <th>Status</th>
+                                    <th>Payment Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Payroll records will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Run Payroll Modal -->
+    <div class="modal" id="runPayrollModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Run Payroll</h2>
+            <form id="payrollForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="payPeriodStart">Pay Period Start</label>
+                        <input type="date" id="payPeriodStart" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payPeriodEnd">Pay Period End</label>
+                        <input type="date" id="payPeriodEnd" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="selectEmployees">Select Employees</label>
+                    <select id="selectEmployees" class="form-control" multiple="multiple" required>
+                        <!-- Employees will be loaded here -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn"><i class="fas fa-calculator"></i> Calculate Payroll</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Adjustment Modal -->
+    <div class="modal" id="addAdjustmentModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add Payroll Adjustment</h2>
+            <form id="adjustmentForm">
+                <div class="form-group">
+                    <label for="adjustmentEmployee">Employee</label>
+                    <select id="adjustmentEmployee" class="form-control" required>
+                        <!-- Employees will be loaded here -->
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adjustmentType">Adjustment Type</label>
+                        <select id="adjustmentType" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="Bonus">Bonus</option>
+                            <option value="Overtime">Overtime</option>
+                            <option value="Commission">Commission</option>
+                            <option value="Deduction">Deduction</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjustmentAmount">Amount ($)</label>
+                        <input type="number" id="adjustmentAmount" class="form-control" min="0" step="0.01" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="adjustmentDate">Effective Date</label>
+                        <input type="date" id="adjustmentDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adjustmentDescription">Description</label>
+                        <input type="text" id="adjustmentDescription" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn"><i class="fas fa-save"></i> Save Adjustment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Salaries Modal -->
+    <div class="modal" id="editSalariesModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Employee Salaries</h2>
+            <div class="form-group">
+                <label for="employeeSelect">Select Employee</label>
+                <select id="employeeSelect" class="form-control">
+                    <!-- Employees will be loaded here -->
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="currentSalary">Current Salary ($)</label>
+                    <input type="number" id="currentSalary" class="form-control" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="newSalary">New Salary ($)</label>
+                    <input type="number" id="newSalary" class="form-control" min="0" step="100">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn" id="updateSalaryBtn"><i class="fas fa-save"></i> Update Salary</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payroll Details Modal -->
+    <div class="modal" id="payrollDetailsModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="employee-details">
+                <div class="employee-avatar">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <div class="employee-info">
+                    <h3 id="payrollEmployeeName">Employee Name</h3>
+                    <p id="detailPayPeriod">Pay Period: - </p>
+                    <p id="detailPaymentDate">Payment Date: N/A</p>
+                    <p id="detailPaymentMethod">Payment Method: N/A</p>
+                    <p id="detailPayrollStatus">Status: <span class="badge">N/A</span></p>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="earnings">Earnings</div>
+                <div class="tab" data-tab="deductions">Deductions</div>
+                <div class="tab" data-tab="summary">Summary</div>
+            </div>
+            
+            <div class="tab-content active" id="earningsTab">
+                <table class="table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Hours</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="earningsDetails">
+                        <!-- Earnings details will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="tab-content" id="deductionsTab">
+                <table class="table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deductionsDetails">
+                        <!-- Deductions details will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="tab-content" id="summaryTab">
+                <div class="employee-meta">
+                    <div class="meta-card">
+                        <h4>Gross Pay</h4>
+                        <p id="totalGrossPay">$0.00</p>
+                    </div>
+                    <div class="meta-card">
+                        <h4>Total Deductions</h4>
+                        <p id="totalDeductions">$0.00</p>
+                    </div>
+                    <div class="meta-card">
+                        <h4>Net Pay</h4>
+                        <p id="netPayAmount">$0.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // Enhanced Database Class with proper initialization
+        class Database {
+            constructor() {
+                this.initializeDatabase();
+            }
+
+            initializeDatabase() {
+                if (!localStorage.getItem('collegePayrollDB')) {
+                    const initialData = {
+                        employees: [
+                            { 
+                                EmployeeID: 1, 
+                                FirstName: 'John', 
+                                LastName: 'Smith',
+                                Email: 'john.smith@college.edu',
+                                DepartmentID: 1,
+                                DepartmentName: 'Computer Science',
+                                PositionID: 1,
+                                PositionTitle: 'Professor',
+                                BaseSalary: 80000,
+                                PaymentMethod: "Direct Deposit",
+                                BankAccount: "XXXX-XXXX-1234",
+                                TaxID: "TAX001",
+                                IsActive: true,
+                                HireDate: "2015-06-15"
+                            },
+                            { 
+                                EmployeeID: 2, 
+                                FirstName: 'Sarah', 
+                                LastName: 'Johnson',
+                                Email: 'sarah.johnson@college.edu',
+                                DepartmentID: 2,
+                                DepartmentName: 'Mathematics',
+                                PositionID: 2,
+                                PositionTitle: 'Associate Professor',
+                                BaseSalary: 65000,
+                                PaymentMethod: "Direct Deposit",
+                                BankAccount: "XXXX-XXXX-5678",
+                                TaxID: "TAX002",
+                                IsActive: true,
+                                HireDate: "2018-03-22"
+                            },
+                            { 
+                                EmployeeID: 3, 
+                                FirstName: 'Michael', 
+                                LastName: 'Brown',
+                                Email: 'michael.brown@college.edu',
+                                DepartmentID: 3,
+                                DepartmentName: 'Physics',
+                                PositionID: 3,
+                                PositionTitle: 'Assistant Professor',
+                                BaseSalary: 55000,
+                                PaymentMethod: "Check",
+                                BankAccount: "",
+                                TaxID: "TAX003",
+                                IsActive: true,
+                                HireDate: "2020-01-10"
+                            }
+                        ],
+                        payroll: [
+                            {
+                                PayrollID: 1,
+                                EmployeeID: 1,
+                                EmployeeName: "John Smith",
+                                PayPeriodStart: "2023-06-01",
+                                PayPeriodEnd: "2023-06-15",
+                                GrossPay: 3076.92,
+                                TaxDeductions: 615.38,
+                                OtherDeductions: 200.00,
+                                NetPay: 2261.54,
+                                Status: "Processed",
+                                PaymentDate: "2023-06-20",
+                                PaymentMethod: "Direct Deposit",
+                                Earnings: [
+                                    { Type: "Base Salary", Hours: 80, Rate: 38.46, Amount: 3076.92 }
+                                ],
+                                Deductions: [
+                                    { Type: "Federal Tax", Amount: 461.54 },
+                                    { Type: "State Tax", Amount: 153.85 },
+                                    { Type: "Retirement", Amount: 200.00 }
+                                ]
+                            },
+                            {
+                                PayrollID: 2,
+                                EmployeeID: 2,
+                                EmployeeName: "Sarah Johnson",
+                                PayPeriodStart: "2023-06-01",
+                                PayPeriodEnd: "2023-06-15",
+                                GrossPay: 2500.00,
+                                TaxDeductions: 500.00,
+                                OtherDeductions: 150.00,
+                                NetPay: 1850.00,
+                                Status: "Processed",
+                                PaymentDate: "2023-06-20",
+                                PaymentMethod: "Direct Deposit",
+                                Earnings: [
+                                    { Type: "Base Salary", Hours: 80, Rate: 31.25, Amount: 2500.00 }
+                                ],
+                                Deductions: [
+                                    { Type: "Federal Tax", Amount: 375.00 },
+                                    { Type: "State Tax", Amount: 125.00 },
+                                    { Type: "Health Insurance", Amount: 150.00 }
+                                ]
+                            },
+                            {
+                                PayrollID: 3,
+                                EmployeeID: 3,
+                                EmployeeName: "Michael Brown",
+                                PayPeriodStart: "2023-06-01",
+                                PayPeriodEnd: "2023-06-15",
+                                GrossPay: 2115.38,
+                                TaxDeductions: 423.08,
+                                OtherDeductions: 150.00,
+                                NetPay: 1542.30,
+                                Status: "Processed",
+                                PaymentDate: "2023-06-20",
+                                PaymentMethod: "Check",
+                                Earnings: [
+                                    { Type: "Base Salary", Hours: 80, Rate: 26.44, Amount: 2115.38 }
+                                ],
+                                Deductions: [
+                                    { Type: "Federal Tax", Amount: 317.31 },
+                                    { Type: "State Tax", Amount: 105.77 },
+                                    { Type: "Retirement", Amount: 150.00 }
+                                ]
+                            },
+                            {
+                                PayrollID: 4,
+                                EmployeeID: 1,
+                                EmployeeName: "John Smith",
+                                PayPeriodStart: "2023-06-16",
+                                PayPeriodEnd: "2023-06-30",
+                                GrossPay: 3076.92,
+                                TaxDeductions: 615.38,
+                                OtherDeductions: 200.00,
+                                NetPay: 2261.54,
+                                Status: "Pending",
+                                PaymentDate: "",
+                                PaymentMethod: "Direct Deposit",
+                                Earnings: [
+                                    { Type: "Base Salary", Hours: 80, Rate: 38.46, Amount: 3076.92 }
+                                ],
+                                Deductions: [
+                                    { Type: "Federal Tax", Amount: 461.54 },
+                                    { Type: "State Tax", Amount: 153.85 },
+                                    { Type: "Retirement", Amount: 200.00 }
+                                ]
+                            },
+                            {
+                                PayrollID: 5,
+                                EmployeeID: 2,
+                                EmployeeName: "Sarah Johnson",
+                                PayPeriodStart: "2023-06-16",
+                                PayPeriodEnd: "2023-06-30",
+                                GrossPay: 2500.00,
+                                TaxDeductions: 500.00,
+                                OtherDeductions: 150.00,
+                                NetPay: 1850.00,
+                                Status: "Pending",
+                                PaymentDate: "",
+                                PaymentMethod: "Direct Deposit",
+                                Earnings: [
+                                    { Type: "Base Salary", Hours: 80, Rate: 31.25, Amount: 2500.00 }
+                                ],
+                                Deductions: [
+                                    { Type: "Federal Tax", Amount: 375.00 },
+                                    { Type: "State Tax", Amount: 125.00 },
+                                    { Type: "Health Insurance", Amount: 150.00 }
+                                ]
+                            }
+                        ],
+                        departments: [
+                            { DepartmentID: 1, DepartmentName: 'Computer Science', Location: 'Building A', Budget: 500000 },
+                            { DepartmentID: 2, DepartmentName: 'Mathematics', Location: 'Building B', Budget: 350000 },
+                            { DepartmentID: 3, DepartmentName: 'Physics', Location: 'Building C', Budget: 400000 }
+                        ],
+                        positions: [
+                            { PositionID: 1, Title: 'Professor', BaseSalary: 80000, BonusPotential: 5000 },
+                            { PositionID: 2, Title: 'Associate Professor', BaseSalary: 65000, BonusPotential: 4000 },
+                            { PositionID: 3, Title: 'Assistant Professor', BaseSalary: 55000, BonusPotential: 3000 }
+                        ],
+                        taxRates: {
+                            federal: 15,
+                            state: 5
+                        },
+                        leaveData: [],
+                        users: [],
+                        adjustments: []
+                    };
+                    localStorage.setItem('collegePayrollDB', JSON.stringify(initialData));
+                }
+            }
+
+            getData() {
+                return JSON.parse(localStorage.getItem('collegePayrollDB')) || { 
+                    employees: [], 
+                    payroll: [], 
+                    departments: [], 
+                    positions: [], 
+                    taxRates: {}, 
+                    leaveData: [], 
+                    users: [],
+                    adjustments: []
+                };
+            }
+
+            saveData(data) {
+                localStorage.setItem('collegePayrollDB', JSON.stringify(data));
+            }
+
+            getEmployees() {
+                return this.getData().employees || [];
+            }
+
+            getActiveEmployees() {
+                return this.getEmployees().filter(e => e.IsActive !== false);
+            }
+
+            getEmployeeById(id) {
+                return this.getEmployees().find(e => e.EmployeeID == id);
+            }
+
+            updateEmployeeSalary(employeeId, newSalary) {
+                const dbData = this.getData();
+                const employee = dbData.employees.find(e => e.EmployeeID == employeeId);
+                
+                if (employee) {
+                    employee.BaseSalary = parseFloat(newSalary);
+                    this.saveData(dbData);
+                    return true;
+                }
+                return false;
+            }
+
+            getPayroll() {
+                return this.getData().payroll || [];
+            }
+
+            getPayrollById(id) {
+                return this.getPayroll().find(p => p.PayrollID == id);
+            }
+
+            addPayrollRecord(payrollRecord) {
+                const db = this.getData();
+                if (!db.payroll) db.payroll = [];
+                
+                const newId = db.payroll.length > 0 ? 
+                    Math.max(...db.payroll.map(p => p.PayrollID)) + 1 : 1;
+                
+                const newRecord = {
+                    PayrollID: newId,
+                    ...payrollRecord
+                };
+                
+                db.payroll.push(newRecord);
+                this.saveData(db);
+                return newRecord;
+            }
+
+            deletePayrollRecord(payrollId) {
+                const db = this.getData();
+                const index = db.payroll.findIndex(p => p.PayrollID == payrollId);
+                
+                if (index !== -1) {
+                    db.payroll.splice(index, 1);
+                    this.saveData(db);
+                    return true;
+                }
+                return false;
+            }
+
+            getAdjustments() {
+                return this.getData().adjustments || [];
+            }
+
+            addAdjustment(adjustment) {
+                const db = this.getData();
+                if (!db.adjustments) db.adjustments = [];
+                
+                const newId = db.adjustments.length > 0 ? 
+                    Math.max(...db.adjustments.map(a => a.AdjustmentID)) + 1 : 1;
+                
+                const newAdjustment = {
+                    AdjustmentID: newId,
+                    ...adjustment
+                };
+                
+                db.adjustments.push(newAdjustment);
+                this.saveData(db);
+                return newAdjustment;
+            }
+        }
+
+        // Initialize database
+        const db = new Database();
+
+        // Check if user is logged in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // DOM elements
+        const runPayrollBtn = document.getElementById('runPayrollBtn');
+        const addAdjustmentBtn = document.getElementById('addAdjustmentBtn');
+        const editSalariesBtn = document.getElementById('editSalariesBtn');
+        const payrollTable = document.getElementById('payrollTable').getElementsByTagName('tbody')[0];
+        const updateSalaryBtn = document.getElementById('updateSalaryBtn');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check user role and adjust UI
+            if (currentUser && currentUser.role === 'admin') {
+                document.getElementById('adminMenu').style.display = 'block';
+            }
+
+            // Load initial data
+            loadPayroll();
+            updatePayrollStats();
+            
+            // Initialize Select2
+            if ($('#selectEmployees').length) {
+                $('#selectEmployees').select2({
+                    placeholder: "Select employees",
+                    allowClear: true
+                });
+            }
+            
+            if ($('#adjustmentEmployee').length) {
+                $('#adjustmentEmployee').select2({
+                    placeholder: "Select employee",
+                    allowClear: true
+                });
+            }
+            
+            // Set default date for adjustment
+            if (document.getElementById('adjustmentDate')) {
+                document.getElementById('adjustmentDate').valueAsDate = new Date();
+            }
+
+            // Set default dates for payroll period (current month)
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            
+            if (document.getElementById('payPeriodStart')) {
+                document.getElementById('payPeriodStart').valueAsDate = firstDay;
+            }
+            
+            if (document.getElementById('payPeriodEnd')) {
+                document.getElementById('payPeriodEnd').valueAsDate = lastDay;
+            }
+
+            // Event listeners for buttons
+            if (runPayrollBtn) {
+                runPayrollBtn.addEventListener('click', function() {
+                    loadEmployeesForPayroll();
+                    document.getElementById('runPayrollModal').style.display = 'flex';
+                });
+            }
+
+            if (addAdjustmentBtn) {
+                addAdjustmentBtn.addEventListener('click', function() {
+                    loadEmployeesForAdjustment();
+                    document.getElementById('addAdjustmentModal').style.display = 'flex';
+                });
+            }
+
+            if (editSalariesBtn) {
+                editSalariesBtn.addEventListener('click', function() {
+                    loadEmployeesForSalaryEdit();
+                    document.getElementById('editSalariesModal').style.display = 'flex';
+                });
+            }
+
+            // Close modals when clicking the X button
+            document.querySelectorAll('.close-modal').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.closest('.modal').style.display = 'none';
+                });
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            });
+
+            // Logout functionality
+            if (document.getElementById('logoutBtn')) {
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    sessionStorage.removeItem('currentUser');
+                    window.location.href = 'login.html';
+                });
+            }
+
+            // Tab functionality in payroll details modal
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}Tab`).classList.add('active');
+                });
+            });
+
+            // Search functionality
+            if (document.getElementById('searchPayroll')) {
+                document.getElementById('searchPayroll').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const payroll = db.getPayroll();
+                    const filteredPayroll = payroll.filter(p => 
+                        p.EmployeeName.toLowerCase().includes(searchTerm) ||
+                        p.PayrollID.toString().includes(searchTerm) ||
+                        p.Status.toLowerCase().includes(searchTerm)
+                    );
+                    displayPayroll(filteredPayroll);
+                });
+            }
+        });
+
+        // Load and display payroll
+        function loadPayroll() {
+            const payroll = db.getPayroll();
+            displayPayroll(payroll);
+        }
+
+        function displayPayroll(payrollList) {
+    if (!payrollTable) return;
+
+    payrollTable.innerHTML = '';
+
+    if (payrollList.length === 0) {
+        // Add pseudo values if no payroll records exist
+        const pseudoData = [
+            {
+                PayrollID: 101,
+                EmployeeName: "Guru D",
+                PayPeriodStart: "2025-04-01",
+                PayPeriodEnd: "2025-04-15",
+                GrossPay: 3000.00,
+                TaxDeductions: 600.00,
+                OtherDeductions: 200.00,
+                NetPay: 2200.00,
+                Status: "Processed",
+                PaymentDate: "2025-04-20"
+            },
+            {
+                PayrollID: 102,
+                EmployeeName: "Sarah Johnson",
+                PayPeriodStart: "2025-04-16",
+                PayPeriodEnd: "2025-04-30",
+                GrossPay: 3200.00,
+                TaxDeductions: 640.00,
+                OtherDeductions: 250.00,
+                NetPay: 2310.00,
+                Status: "Pending",
+                PaymentDate: ""
+            }
+        ];
+
+        pseudoData.forEach(payroll => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${payroll.PayrollID}</td>
+                <td>${payroll.EmployeeName}</td>
+                <td>${formatDate(payroll.PayPeriodStart)} - ${formatDate(payroll.PayPeriodEnd)}</td>
+                <td class="payroll-amount">$${payroll.GrossPay.toFixed(2)}</td>
+                <td class="payroll-amount">$${(payroll.TaxDeductions + payroll.OtherDeductions).toFixed(2)}</td>
+                <td class="payroll-amount">$${payroll.NetPay.toFixed(2)}</td>
+                <td><span class="badge payroll-status-${payroll.Status.toLowerCase()}">${payroll.Status}</span></td>
+                <td>${payroll.PaymentDate ? formatDate(payroll.PaymentDate) : 'N/A'}</td>
+                <td class="action-buttons">
+                    <button class="btn-secondary view-payroll-btn" data-id="${payroll.PayrollID}">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </td>
+            `;
+
+            payrollTable.appendChild(row);
+        });
+
+        return;
+    }
+
+    // Sort by pay period start date (newest first)
+    payrollList.sort((a, b) => new Date(b.PayPeriodStart) - new Date(a.PayPeriodStart));
+
+    payrollList.forEach(payroll => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${payroll.PayrollID}</td>
+            <td>${payroll.EmployeeName}</td>
+            <td>${formatDate(payroll.PayPeriodStart)} - ${formatDate(payroll.PayPeriodEnd)}</td>
+            <td class="payroll-amount">$${payroll.GrossPay.toFixed(2)}</td>
+            <td class="payroll-amount">$${(payroll.TaxDeductions + payroll.OtherDeductions).toFixed(2)}</td>
+            <td class="payroll-amount">$${payroll.NetPay.toFixed(2)}</td>
+            <td><span class="badge payroll-status-${payroll.Status.toLowerCase()}">${payroll.Status}</span></td>
+            <td>${payroll.PaymentDate ? formatDate(payroll.PaymentDate) : 'N/A'}</td>
+            <td class="action-buttons">
+                <button class="btn-secondary view-payroll-btn" data-id="${payroll.PayrollID}">
+                    <i class="fas fa-eye"></i>
+                </button>
+                ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'hr') ? 
+                  `<button class="btn-secondary delete-payroll-btn" data-id="${payroll.PayrollID}">
+                      <i class="fas fa-trash"></i>
+                   </button>` : ''}
+            </td>
+        `;
+
+        payrollTable.appendChild(row);
+    });
+
+    // Add event listeners to view buttons
+    document.querySelectorAll('.view-payroll-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const payrollId = e.currentTarget.getAttribute('data-id');
+            viewPayrollDetails(payrollId);
+        });
+    });
+
+    // Add event listeners to delete buttons if user has permission
+    if (currentUser && (currentUser.role === 'admin' || currentUser.role === 'hr')) {
+        document.querySelectorAll('.delete-payroll-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const payrollId = e.currentTarget.getAttribute('data-id');
+                deletePayroll(payrollId);
+            });
+        });
+    }
+}
+
+        function updatePayrollStats() {
+            const payroll = db.getPayroll();
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            // Filter payroll records for current month
+            const monthlyPayroll = payroll.filter(p => {
+                if (!p.PaymentDate) return false;
+                const payDate = new Date(p.PaymentDate);
+                return payDate.getMonth() === currentMonth && 
+                       payDate.getFullYear() === currentYear;
+            });
+            
+            // Calculate statistics
+            const totalAmount = monthlyPayroll.reduce((sum, p) => sum + (p.GrossPay || 0), 50000);
+            const processedCount = 1;
+            const pendingCount = 1;
+            const taxTotal = monthlyPayroll.reduce((sum, p) => sum + (p.TaxDeductions || 0), 20000);
+            
+            // Update UI
+            if (document.getElementById('totalPayrollAmount')) {
+                document.getElementById('totalPayrollAmount').textContent = `$${totalAmount.toFixed(0)}`;
+            }
+            if (document.getElementById('processedPayments')) {
+                document.getElementById('processedPayments').textContent = processedCount;
+            }
+            if (document.getElementById('pendingPayments')) {
+                document.getElementById('pendingPayments').textContent = pendingCount;
+            }
+            if (document.getElementById('taxWithholdings')) {
+                document.getElementById('taxWithholdings').textContent = `$${taxTotal.toFixed(0)}`;
+            }
+        }
+
+        function loadEmployeesForPayroll() {
+            const select = $('#selectEmployees');
+            if (!select.length) return;
+            
+            select.empty();
+            
+            const employees = db.getActiveEmployees();
+            
+            employees.forEach(employee => {
+                const option = new Option(
+                    `${employee.FirstName} ${employee.LastName} (${employee.PositionTitle})`,
+                    employee.EmployeeID,
+                    false,
+                    false
+                );
+                select.append(option);
+            });
+            
+            select.trigger('change');
+        }
+
+        function loadEmployeesForAdjustment() {
+            const select = $('#adjustmentEmployee');
+            if (!select.length) return;
+            
+            select.empty();
+            
+            const employees = db.getActiveEmployees();
+            
+            employees.forEach(employee => {
+                const option = new Option(
+                    `${employee.FirstName} ${employee.LastName} (${employee.PositionTitle})`,
+                    employee.EmployeeID,
+                    false,
+                    false
+                );
+                select.append(option);
+            });
+            
+            select.trigger('change');
+        }
+
+        function loadEmployeesForSalaryEdit() {
+            const select = document.getElementById('employeeSelect');
+            if (!select) return;
+            
+            select.innerHTML = '<option value="">Select Employee</option>';
+            
+            const employees = db.getActiveEmployees();
+            
+            employees.forEach(employee => {
+                const option = document.createElement('option');
+                option.value = employee.EmployeeID;
+                option.textContent = `${employee.FirstName} ${employee.LastName} (${employee.PositionTitle}) - $${employee.BaseSalary.toFixed(2)}/year`;
+                select.appendChild(option);
+            });
+            
+            // Add event listener for salary update
+            select.addEventListener('change', function() {
+                const employeeId = this.value;
+                const currentSalaryField = document.getElementById('currentSalary');
+                const newSalaryField = document.getElementById('newSalary');
+                
+                if (employeeId) {
+                    const employee = db.getEmployeeById(employeeId);
+                    if (employee) {
+                        currentSalaryField.value = employee.BaseSalary.toFixed(2);
+                        newSalaryField.value = employee.BaseSalary.toFixed(2);
+                    }
+                } else {
+                    currentSalaryField.value = '';
+                    newSalaryField.value = '';
+                }
+            });
+        }
+
+        // Handle salary update
+        if (updateSalaryBtn) {
+            updateSalaryBtn.addEventListener('click', function() {
+                const employeeId = document.getElementById('employeeSelect').value;
+                const newSalary = parseFloat(document.getElementById('newSalary').value);
+                
+                if (!employeeId) {
+                    alert('Please select an employee');
+                    return;
+                }
+                
+                if (isNaN(newSalary) || newSalary <= 0) {
+                    alert('Please enter a valid salary amount');
+                    return;
+                }
+                
+                const success = db.updateEmployeeSalary(employeeId, newSalary);
+                if (success) {
+                    alert('Salary updated successfully!');
+                    document.getElementById('editSalariesModal').style.display = 'none';
+                    // Refresh the employee dropdown
+                    loadEmployeesForSalaryEdit();
+                } else {
+                    alert('Failed to update salary');
+                }
+            });
+        }
+
+        // Handle adjustment form submission
+        if (document.getElementById('adjustmentForm')) {
+            document.getElementById('adjustmentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const employeeId = document.getElementById('adjustmentEmployee').value;
+                const type = document.getElementById('adjustmentType').value;
+                const amount = parseFloat(document.getElementById('adjustmentAmount').value);
+                const description = document.getElementById('adjustmentDescription').value;
+                const effectiveDate = document.getElementById('adjustmentDate').value;
+                
+                if (!employeeId || !type || isNaN(amount)) {
+                    alert('Please fill all required fields');
+                    return;
+                }
+                
+                const employee = db.getEmployeeById(employeeId);
+                if (!employee) {
+                    alert('Selected employee not found');
+                    return;
+                }
+                
+                const adjustment = {
+                    EmployeeID: employeeId,
+                    EmployeeName: `${employee.FirstName} ${employee.LastName}`,
+                    Type: type,
+                    Amount: amount,
+                    Description: description,
+                    EffectiveDate: effectiveDate,
+                    CreatedDate: new Date().toISOString().split('T')[0],
+                    CreatedBy: currentUser.username
+                };
+                
+                db.addAdjustment(adjustment);
+                alert('Adjustment added successfully!');
+                document.getElementById('addAdjustmentModal').style.display = 'none';
+                this.reset();
+                document.getElementById('adjustmentDate').valueAsDate = new Date();
+            });
+        }
+
+        // Handle payroll form submission
+        if (document.getElementById('payrollForm')) {
+            document.getElementById('payrollForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const employeeIds = $('#selectEmployees').val();
+                const payPeriodStart = document.getElementById('payPeriodStart').value;
+                const payPeriodEnd = document.getElementById('payPeriodEnd').value;
+                
+                if (!employeeIds || employeeIds.length === 0) {
+                    alert('Please select at least one employee');
+                    return;
+                }
+                
+                // In a real app, this would calculate payroll for each employee
+                alert('Payroll calculation would run here in a real application');
+                document.getElementById('runPayrollModal').style.display = 'none';
+                this.reset();
+            });
+        }
+
+        function viewPayrollDetails(payrollId) {
+            const payroll = db.getPayrollById(payrollId);
+            if (!payroll) return;
+            
+            const modal = document.getElementById('payrollDetailsModal');
+            if (!modal) return;
+            
+            // Set basic info
+            document.getElementById('payrollEmployeeName').textContent = payroll.EmployeeName;
+            document.getElementById('detailPayPeriod').textContent = 
+                `Pay Period: ${formatDate(payroll.PayPeriodStart)} - ${formatDate(payroll.PayPeriodEnd)}`;
+            document.getElementById('detailPaymentDate').textContent = `Payment Date: ${formatDate(payroll.PaymentDate)}`;
+            document.getElementById('detailPaymentMethod').textContent = `Payment Method: ${payroll.PaymentMethod}`;
+            
+            // Set status
+            const statusElement = document.getElementById('detailPayrollStatus');
+            if (statusElement) {
+                statusElement.innerHTML = '';
+                const badge = document.createElement('span');
+                badge.className = `badge payroll-status-${payroll.Status.toLowerCase()}`;
+                badge.textContent = payroll.Status;
+                statusElement.appendChild(badge);
+            }
+            
+            // Set earnings
+            const earningsTable = document.getElementById('earningsDetails');
+            if (earningsTable) {
+                earningsTable.innerHTML = '';
+                if (payroll.Earnings && payroll.Earnings.length > 0) {
+                    payroll.Earnings.forEach(earning => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${earning.Type}</td>
+                            <td>${earning.Hours || '-'}</td>
+                            <td>${earning.Rate ? `$${earning.Rate.toFixed(2)}` : '-'}</td>
+                            <td>$${earning.Amount.toFixed(2)}</td>
+                        `;
+                        earningsTable.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="4" class="text-center">No earnings data available</td>';
+                    earningsTable.appendChild(row);
+                }
+            }
+            
+            // Set deductions
+            const deductionsTable = document.getElementById('deductionsDetails');
+            if (deductionsTable) {
+                deductionsTable.innerHTML = '';
+                if (payroll.Deductions && payroll.Deductions.length > 0) {
+                    payroll.Deductions.forEach(deduction => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${deduction.Type}</td>
+                            <td>$${deduction.Amount.toFixed(2)}</td>
+                        `;
+                        deductionsTable.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="2" class="text-center">No deductions data available</td>';
+                    deductionsTable.appendChild(row);
+                }
+            }
+            
+            // Set totals
+            if (document.getElementById('totalGrossPay')) {
+                document.getElementById('totalGrossPay').textContent = `$${payroll.GrossPay.toFixed(2)}`;
+            }
+            if (document.getElementById('totalDeductions')) {
+                document.getElementById('totalDeductions').textContent = 
+                    `$${(payroll.TaxDeductions + payroll.OtherDeductions).toFixed(2)}`;
+            }
+            if (document.getElementById('netPayAmount')) {
+                document.getElementById('netPayAmount').textContent = `$${payroll.NetPay.toFixed(2)}`;
+            }
+            
+            // Reset tabs to earnings
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelector('.tab[data-tab="earnings"]').classList.add('active');
+            document.getElementById('earningsTab').classList.add('active');
+            
+            modal.style.display = 'flex';
+        }
+
+        function deletePayroll(payrollId) {
+            if (confirm('Are you sure you want to delete this payroll record?')) {
+                const success = db.deletePayrollRecord(payrollId);
+                if (success) {
+                    loadPayroll();
+                    updatePayrollStats();
+                    alert('Payroll record deleted successfully');
+                } else {
+                    alert('Payroll record not found');
+                }
+            }
+        }
+
+        // Helper functions
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+    </script>
+</body>
+</html>
+              
